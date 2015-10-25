@@ -19,37 +19,52 @@ function checkingDeposit() {
 function checkingWithdrawal() {
   checkingBalance = parseInt($("div#checking-balance").text().substr(1));
   checkingInput = parseInt($("input").eq(0).val());
-  if (checkingInput <= checkingBalance) { 
+  if (checkingInput <= checkingBalance) {
     checkingBalance -= checkingInput;
     checkingBalanceDiv.text("$" + checkingBalance);
-    $("input").eq(0).val("");
-   } else {
-    savingsBalance -= (checkingInput - checkingBalance); ;
-       checkingBalance = 0;
-       checkingBalanceDiv.text("$" + checkingBalance);
-       savingsBalanceDiv.text("$" + savingsBalance);
-   }
-}
+  } else if (checkingInput <= (checkingBalance + savingsBalance)) {
+    savingsBalance -= (checkingInput - checkingBalance);;
+    checkingBalance = 0;
+    checkingBalanceDiv.text("$" + checkingBalance);
+    savingsBalanceDiv.text("$" + savingsBalance);
+  } else {
+    alert("You have insufficient funds.");
+  }
+  $("input").eq(0).val("");
+  if (checkingBalance === 0) {
+    checkingBalanceDiv.addClass("zero");
+  } else if (savingsBalance === 0) {
+      savingsBalanceDivadd.Class("zero");
+    }
+    // }
+  }
 
-function savingsDeposit() {
-  savingsBalance = parseInt($("div#savings-balance").text().substr(1));
-  savingsInput = parseInt($("input").eq(3).val());
-  savingsBalance += savingsInput;
-  savingsBalanceDiv.text("$" + savingsBalance);
-  $("input").eq(3).val("");
-}
-
-function savingsWithdrawal() {
-  savingsBalance = parseInt($("div#savings-balance").text().substr(1));
-  savingsInput = parseInt($("input").eq(3).val());
-  if (savingsInput <= savingsBalance) { 
-    savingsBalance -= savingsInput;
+  function savingsDeposit() {
+    savingsBalance = parseInt($("div#savings-balance").text().substr(1));
+    savingsInput = parseInt($("input").eq(3).val());
+    savingsBalance += savingsInput;
     savingsBalanceDiv.text("$" + savingsBalance);
     $("input").eq(3).val("");
-  } else {
-    checkingBalance -= (savingsInput - savingsBalance); ;
-     savingsBalance = 0;
-     checkingBalanceDiv.text("$" + checkingBalance);
-     savingsBalanceDiv.text("$" + savingsBalance);
-}
-}
+  }
+
+  function savingsWithdrawal() {
+    savingsBalance = parseInt($("div#savings-balance").text().substr(1));
+    savingsInput = parseInt($("input").eq(3).val());
+    if (savingsInput <= savingsBalance) {
+      savingsBalance -= savingsInput;
+      savingsBalanceDiv.text("$" + savingsBalance);
+    } else if (savingsInput <= (checkingBalance + savingsBalance)) {
+      checkingBalance -= (savingsInput - savingsBalance);;
+      savingsBalance = 0;
+      checkingBalanceDiv.text("$" + checkingBalance);
+      savingsBalanceDiv.text("$" + savingsBalance);
+    } else {
+      alert("You have insufficient funds.");
+    }
+    $("input").eq(3).val("");
+    if (checkingBalance === 0) {
+      checkingBalanceDiv.addClass("zero");
+      } else if (savingsBalance === 0) {
+        savingsBalanceDiv.addClass("zero");
+      }
+    }
