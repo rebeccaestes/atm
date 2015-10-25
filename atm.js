@@ -1,5 +1,7 @@
 var checkingBalanceDiv = $("div#checking-balance");
 var savingsBalanceDiv = $("div#savings-balance");
+var checkingInputDiv = $("input").eq(0);
+var savingsInputDiv = $("input").eq(3);
 
 var checkingBalance, savingsBalance, checkingInput, savingsInput;
 
@@ -8,17 +10,28 @@ $("input").eq(2).on("click", checkingWithdrawal);
 $("input").eq(4).on("click", savingsDeposit);
 $("input").eq(5).on("click", savingsWithdrawal);
 
+function getBalance(divElement) {
+  return parseInt(divElement.text().substr(1), 10);
+}
+
+function getInput(inputElement) {
+  return parseInt(inputElement.val(), 10);
+}
+
 function checkingDeposit() {
-  checkingBalance = parseInt($("div#checking-balance").text().substr(1));
-  checkingInput = parseInt($("input").eq(0).val());
+  checkingBalance = getBalance(checkingBalanceDiv);
+  checkingInput = getInput(checkingInputDiv);
+  if (checkingBalance === 0 && checkingInput > 0) {
+    checkingBalanceDiv.removeClass("zero");
+  }
   checkingBalance += checkingInput;
   checkingBalanceDiv.text("$" + checkingBalance);
   $("input").eq(0).val("");
 }
 
 function checkingWithdrawal() {
-  checkingBalance = parseInt($("div#checking-balance").text().substr(1));
-  checkingInput = parseInt($("input").eq(0).val());
+  checkingBalance = getBalance(checkingBalanceDiv);
+  checkingInput = getInput(checkingInputDiv);
   if (checkingInput <= checkingBalance) {
     checkingBalance -= checkingInput;
     checkingBalanceDiv.text("$" + checkingBalance);
@@ -33,23 +46,26 @@ function checkingWithdrawal() {
   $("input").eq(0).val("");
   if (checkingBalance === 0) {
     checkingBalanceDiv.addClass("zero");
-  } else if (savingsBalance === 0) {
+  }
+  if (savingsBalance === 0) {
       savingsBalanceDivadd.Class("zero");
     }
-    // }
   }
 
   function savingsDeposit() {
-    savingsBalance = parseInt($("div#savings-balance").text().substr(1));
-    savingsInput = parseInt($("input").eq(3).val());
+  savingsBalance = getBalance(savingsBalanceDiv);
+  savingsInput = getInput(savingsInputDiv);
+  if (savingsBalance === 0 && savingsInput > 0) {
+    savingsBalanceDiv.removeClass("zero");
+  }
     savingsBalance += savingsInput;
     savingsBalanceDiv.text("$" + savingsBalance);
     $("input").eq(3).val("");
   }
 
   function savingsWithdrawal() {
-    savingsBalance = parseInt($("div#savings-balance").text().substr(1));
-    savingsInput = parseInt($("input").eq(3).val());
+  savingsBalance = getBalance(savingsBalanceDiv);
+  savingsInput = getInput(savingsInputDiv);
     if (savingsInput <= savingsBalance) {
       savingsBalance -= savingsInput;
       savingsBalanceDiv.text("$" + savingsBalance);
@@ -64,7 +80,8 @@ function checkingWithdrawal() {
     $("input").eq(3).val("");
     if (checkingBalance === 0) {
       checkingBalanceDiv.addClass("zero");
-      } else if (savingsBalance === 0) {
-        savingsBalanceDiv.addClass("zero");
-      }
+    } 
+    if (savingsBalance === 0) {
+      savingsBalanceDiv.addClass("zero");
     }
+  }
