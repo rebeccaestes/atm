@@ -1,21 +1,55 @@
-var checkingBalance = document.querySelector("div#checking_balance");
-checkingBalance = parseInt( checkingBalance.innerHTML.replace("$", "") );
+var checkingBalanceDiv = $("div#checking-balance");
+var savingsBalanceDiv = $("div#savings-balance");
 
-var checkingDeposit = function(amount){
-  checkingBalance = parseInt( checkingBalance.innerHTML.replace("$", "") );
+var checkingBalance, savingsBalance, checkingInput, savingsInput;
 
+$("input").eq(1).on("click", checkingDeposit);
+$("input").eq(2).on("click", checkingWithdrawal);
+$("input").eq(4).on("click", savingsDeposit);
+$("input").eq(5).on("click", savingsWithdrawal);
+
+function checkingDeposit() {
+  checkingBalance = parseInt($("div#checking-balance").text().substr(1));
+  checkingInput = parseInt($("input").eq(0).val());
+  checkingBalance += checkingInput;
+  checkingBalanceDiv.text("$" + checkingBalance);
+  $("input").eq(0).val("");
 }
 
-function checkingWithdrawal(amount){
-
+function checkingWithdrawal() {
+  checkingBalance = parseInt($("div#checking-balance").text().substr(1));
+  checkingInput = parseInt($("input").eq(0).val());
+  if (checkingInput <= checkingBalance) { 
+    checkingBalance -= checkingInput;
+    checkingBalanceDiv.text("$" + checkingBalance);
+    $("input").eq(0).val("");
+   } else {
+    savingsBalance -= (checkingInput - checkingBalance); ;
+       checkingBalance = 0;
+       checkingBalanceDiv.text("$" + checkingBalance);
+       savingsBalanceDiv.text("$" + savingsBalance);
+   }
 }
 
-function savingsDeposit(amount){
-
+function savingsDeposit() {
+  savingsBalance = parseInt($("div#savings-balance").text().substr(1));
+  savingsInput = parseInt($("input").eq(3).val());
+  savingsBalance += savingsInput;
+  savingsBalanceDiv.text("$" + savingsBalance);
+  $("input").eq(3).val("");
 }
 
-function savingsWithdrawal(amount){
-
+function savingsWithdrawal() {
+  savingsBalance = parseInt($("div#savings-balance").text().substr(1));
+  savingsInput = parseInt($("input").eq(3).val());
+  if (savingsInput <= savingsBalance) { 
+    savingsBalance -= savingsInput;
+    savingsBalanceDiv.text("$" + savingsBalance);
+    $("input").eq(3).val("");
+  } else {
+    checkingBalance -= (savingsInput - savingsBalance); ;
+     savingsBalance = 0;
+     checkingBalanceDiv.text("$" + checkingBalance);
+     savingsBalanceDiv.text("$" + savingsBalance);
 }
-
-// an eventListerner for each button, each one a "click"
+}
